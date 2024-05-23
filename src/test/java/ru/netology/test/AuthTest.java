@@ -19,33 +19,12 @@ public class AuthTest {
     private static RegistrationDto userBlocked = DataGenerator.Registration.generate("blocked");
     private static RegistrationDto userInvalid = DataGenerator.Registration.generate("active");
 
-    private static RequestSpecification requestSpec = new RequestSpecBuilder()
-            .setBaseUri("http://localhost")
-            .setPort(9999)
-            .setAccept(ContentType.JSON)
-            .setContentType(ContentType.JSON)
-            .log(LogDetail.ALL)
-            .build();
+
 
     @BeforeAll
     static void setUpAll() {
-        // сам запрос
-        given() // "дано"
-                .spec(requestSpec) // указываем, какую спецификацию используем
-                .body(userActive)  // передаём в теле объект активный пользователь, который будет преобразован в JSON
-                .when() // "когда"
-                .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
-                .then() // "тогда ожидаем"
-                .statusCode(200); // код 200 OK
-
-
-        given()
-                .spec(requestSpec)
-                .body(userBlocked)  // заблокированный пользователь
-                .when()
-                .post("/api/system/users")
-                .then()
-                .statusCode(200);
+        DataGenerator.Registration.setUpUserActive(userActive);
+        DataGenerator.Registration.setUpUserBlocked(userBlocked);
     }
 
     @Test
